@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="A self-contained Connect 4 game. Play the computer or a friend, online or offline.">
+  <title>Four in a row</title>
+  <style>
+    :root { --paper:#f6f1e7; --ink:#172b3a; --muted:#52616a; --board:#203d50; --red:#bd382d; --gold:#e9b846; --line:#d4cdbf; --focus:#1e6592; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:var(--paper); color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+    ::selection { background:var(--gold); color:var(--ink); }
+    button, select { font:inherit; }
+    button, select { -webkit-tap-highlight-color:transparent; }
+    button { cursor:pointer; }
+    button:focus-visible, select:focus-visible { outline:3px solid var(--focus); outline-offset:4px; }
+    main { width:min(1120px,100%); margin:auto; min-height:100vh; padding:64px 40px 40px; display:grid; grid-template-columns:minmax(220px,0.8fr) minmax(0,1.4fr); align-items:center; gap:64px; }
+    h1 { font-family:Georgia,'Times New Roman',serif; font-size:clamp(3.4rem,6.4vw,5.6rem); line-height:0.98; letter-spacing:-0.035em; font-weight:normal; margin:0 0 28px; max-width:6ch; }
+    .intro { font-size:1.05rem; line-height:1.6; max-width:30ch; margin:0 0 36px; color:var(--muted); }
+    label { font-size:0.85rem; font-weight:bold; display:block; margin-bottom:10px; }
+    select { width:100%; max-width:290px; padding:13px 36px 13px 14px; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink); cursor:pointer; }
+    .new-game { display:block; margin-top:14px; border:0; border-radius:8px; padding:14px 23px; background:var(--ink); color:white; font-weight:bold; min-height:48px; }
+    .new-game:hover { background:#29495e; }
+    .help { margin-top:32px; max-width:31ch; font-size:0.85rem; line-height:1.65; color:var(--muted); }
+    kbd { font:inherit; font-weight:bold; }
+    .game-area { min-width:0; }
+    .game-header { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:42px; }
+    #status { font-weight:bold; line-height:1.4; margin:0; font-size:1rem; }
+    #move-count { flex-shrink:0; color:var(--muted); font-size:0.82rem; font-variant-numeric:tabular-nums; }
+    .column-controls { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:8px; padding:0 16px; margin:14px 0 8px; }
+    .column-button { border:1px solid var(--line); border-radius:8px; min-height:44px; background:transparent; color:var(--ink); font-weight:bold; font-variant-numeric:tabular-nums; transition:background 120ms ease,color 120ms ease; }
+    .column-button:hover:not(:disabled) { color:white; background:var(--ink); border-color:var(--ink); }
+    .column-button:disabled { cursor:default; color:#747975; border-color:#ded7ca; }
+    #board { padding:16px; border-radius:16px; background:var(--board); box-shadow:0 12px 28px #172b3a1a; }
+    .board-row { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:8px; }
+    .board-row + .board-row { margin-top:8px; }
+    .cell { aspect-ratio:1; border-radius:50%; background:var(--paper); position:relative; box-shadow:inset 0 2px 4px #172b3a30; }
+    .cell.red { background:var(--red); box-shadow:inset 0 -3px 0 #00000020; }
+    .cell.gold { background:var(--gold); box-shadow:inset 0 -3px 0 #00000020; }
+    .cell.winning::after { content:''; position:absolute; inset:19%; border:3px solid white; border-radius:50%; }
+    .cell.last-move:not(.winning)::after { content:''; position:absolute; width:12%; height:12%; left:44%; top:44%; background:#172b3a; border-radius:50%; opacity:0.65; }
+    .cell.just-dropped { animation:drop-in 220ms cubic-bezier(0.16,1,0.3,1); }
+    @keyframes drop-in { from { transform:translateY(-26px); } to { transform:translateY(0); } }
+    .legend { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin:20px 1px 0; font-size:0.88rem; color:var(--muted); }
+    .legend span { display:inline-flex; align-items:center; gap:9px; }
+    .disc { width:13px; height:13px; border-radius:50%; display:inline-block; flex-shrink:0; }
+    .disc.red { background:var(--red); }
+    .disc.gold { background:var(--gold); }
+    .rules { font-size:0.8rem; color:var(--muted); line-height:1.6; margin:22px 0 0; }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+    noscript { display:block; padding:24px; color:var(--red); font-weight:bold; }
+    @media (max-width:800px) {
+      main { display:block; min-height:auto; max-width:600px; padding:32px 22px; }
+      h1 { font-size:3.5rem; max-width:none; margin-bottom:14px; }
+      .intro { max-width:46ch; margin-bottom:22px; font-size:0.98rem; }
+      .setup { display:flex; gap:12px; align-items:flex-end; margin-bottom:26px; }
+      .mode-field { flex:1; min-width:0; }
+      select { max-width:none; }
+      .new-game { margin:0; flex-shrink:0; }
+      .help { display:none; }
+      .rules { margin-top:16px; }
+    }
+    @media (max-width:380px) {
+      main { padding:26px 14px; }
+      h1 { font-size:3rem; }
+      .setup { gap:8px; }
+      .new-game { padding:14px 14px; }
+      select { padding-left:10px; font-size:0.92rem; }
+      #board { padding:11px; border-radius:12px; }
+      .board-row { gap:6px; }
+      .board-row + .board-row { margin-top:6px; }
+      .column-controls { padding:0 11px; gap:6px; }
+      #status { font-size:0.9rem; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section aria-labelledby="title">
+      <h1 id="title">Four in<br>a row.</h1>
+      <p class="intro">A little strategy. A little foresight. Connect four of your discs before the other side does.</p>
+      <div class="setup">
+        <div class="mode-field">
+          <label for="mode">Play against</label>
+          <select id="mode"><option value="computer">The computer</option><option value="friend">A friend</option></select>
+        </div>
+        <button class="new-game" id="new-game" type="button">New game</button>
+      </div>
+      <p class="help">Choose a numbered column or press <kbd>1</kbd>–<kbd>7</kbd>. Discs fall to the lowest open space. Red always goes first.</p>
+    </section>
+    <section class="game-area" aria-label="Connect 4 game">
+      <div class="game-header">
+        <p id="status" role="status" aria-live="polite" aria-atomic="true">Your turn — choose a column.</p>
+        <span id="move-count">0 moves</span>
+      </div>
+      <div class="column-controls" id="columns" role="group" aria-label="Choose a column"></div>
+      <div id="board" role="grid" aria-label="Connect 4 board, 6 rows and 7 columns" aria-rowcount="6" aria-colcount="7"></div>
+      <div class="legend"><span><i class="disc red" aria-hidden="true"></i><span id="red-name">You · red</span></span><span><i class="disc gold" aria-hidden="true"></i><span id="gold-name">Computer · gold</span></span></div>
+      <p class="rules">Four together wins: across, up and down, or diagonally. Choose a column above or press 1–7. The computer takes a win, blocks an immediate loss, then favors the center.</p>
+    </section>
+  </main>
+  <noscript>This game needs JavaScript. Enable it in your browser, then reopen this file.</noscript>
+  <script id="game-script">
+  (() => {
+    'use strict';
+    const ROWS = 6, COLS = 7;
+    const newState = () => ({ board: Array.from({length: ROWS}, () => Array(COLS).fill(0)), current: 1, winner: 0, draw: false, winningCells: [], moves: 0, lastMove: null });
+    const legalColumns = state => state.winner || state.draw ? [] : Array.from({length: COLS}, (_, c) => c).filter(c => state.board[0][c] === 0);
+    function winningLine(board, row, col, player) {
+      for (const [dr, dc] of [[0,1], [1,0], [1,1], [1,-1]]) {
+        const line = [[row, col]];
+        for (const sign of [-1, 1]) {
+          let r = row + dr * sign, c = col + dc * sign;
+          while (r >= 0 && r < ROWS && c >= 0 && c < COLS && board[r][c] === player) {
+            line.push([r, c]); r += dr * sign; c += dc * sign;
+          }
+        }
+        if (line.length >= 4) return line;
+      }
+      return [];
+    }
+    function drop(state, col) {
+      if (!Number.isInteger(col) || col < 0 || col >= COLS || state.winner || state.draw || state.board[0][col] !== 0) return null;
+      const board = state.board.map(row => row.slice());
+      let row = ROWS - 1;
+      while (board[row][col] !== 0) row--;
+      board[row][col] = state.current;
+      const winningCells = winningLine(board, row, col, state.current);
+      const moves = state.moves + 1;
+      const winner = winningCells.length ? state.current : 0;
+      const draw = !winner && moves === ROWS * COLS;
+      return { board, current: winner || draw ? state.current : 3 - state.current, winner, draw, winningCells, moves, lastMove: [row, col] };
+    }
+    function computerColumn(state) {
+      if (state.current !== 2 || state.winner || state.draw) return null;
+      const legal = legalColumns(state);
+      for (const col of legal) if (drop(state, col).winner === 2) return col;
+      const opponent = {...state, current: 1};
+      for (const col of legal) if (drop(opponent, col).winner === 1) return col;
+      return [3,2,4,1,5,0,6].find(col => legal.includes(col)) ?? null;
+    }
+    // The same pure rules are used by the interface and the local test harness.
+    globalThis.ConnectFour = Object.freeze({ ROWS, COLS, newState, legalColumns, drop, computerColumn });
+    if (typeof document === 'undefined') return;
+
+    const boardElement = document.getElementById('board');
+    const controls = document.getElementById('columns');
+    const status = document.getElementById('status');
+    const modeSelect = document.getElementById('mode');
+    const count = document.getElementById('move-count');
+    const cells = [], buttons = [];
+    let game = newState(), thinking = false, timer = null, generation = 0, animatedMove = -1;
+    for (let row = 0; row < ROWS; row++) {
+      const rowElement = document.createElement('div');
+      rowElement.className = 'board-row'; rowElement.setAttribute('role', 'row');
+      const rowCells = [];
+      for (let col = 0; col < COLS; col++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell'; cell.setAttribute('role', 'gridcell');
+        rowElement.append(cell); rowCells.push(cell);
+      }
+      boardElement.append(rowElement); cells.push(rowCells);
+    }
+    for (let col = 0; col < COLS; col++) {
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'column-button'; button.textContent = col + 1;
+      button.addEventListener('click', () => move(col));
+      controls.append(button); buttons.push(button);
+    }
+    function render() {
+      const terminal = Boolean(game.winner || game.draw);
+      const animate = game.moves !== animatedMove;
+      cells.forEach((rowCells, row) => rowCells.forEach((cell, col) => {
+        const player = game.board[row][col];
+        const winning = game.winningCells.some(([r,c]) => r === row && c === col);
+        const last = game.lastMove && game.lastMove[0] === row && game.lastMove[1] === col;
+        cell.className = 'cell' + (player === 1 ? ' red' : player === 2 ? ' gold' : '') + (winning ? ' winning' : '') + (last ? ' last-move' : '') + (last && animate ? ' just-dropped' : '');
+        cell.setAttribute('aria-label', `Row ${row + 1}, column ${col + 1}: ${player === 1 ? 'red' : player === 2 ? 'gold' : 'empty'}${winning ? ', winning disc' : ''}`);
+      }));
+      animatedMove = game.moves;
+      buttons.forEach((button, col) => {
+        const full = game.board[0][col] !== 0;
+        button.disabled = terminal || thinking || full;
+        button.setAttribute('aria-label', `Drop in column ${col + 1}${full ? ' (full)' : ''}`);
+      });
+      const vsComputer = modeSelect.value === 'computer';
+      status.textContent = game.winner ? (vsComputer ? (game.winner === 1 ? 'You win! Nicely played.' : 'Computer wins. Try another round.') : (game.winner === 1 ? 'Red wins! Nicely played.' : 'Gold wins! Nicely played.')) : game.draw ? 'A draw. Another round?' : thinking ? 'Computer is thinking…' : vsComputer ? 'Your turn — choose a column.' : `${game.current === 1 ? 'Red' : 'Gold'} to play — choose a column.`;
+      count.textContent = `${game.moves} ${game.moves === 1 ? 'move' : 'moves'}`;
+      document.getElementById('red-name').textContent = vsComputer ? 'You · red' : 'Player 1 · red';
+      document.getElementById('gold-name').textContent = vsComputer ? 'Computer · gold' : 'Player 2 · gold';
+    }
+    function move(col) {
+      if (thinking || game.winner || game.draw) return;
+      const next = drop(game, col);
+      if (!next) { status.textContent = 'That column is full. Choose another.'; return; }
+      game = next;
+      if (modeSelect.value === 'computer' && game.current === 2 && !game.winner && !game.draw) {
+        thinking = true;
+        const thisGame = generation;
+        render();
+        timer = setTimeout(() => {
+          if (thisGame !== generation) return;
+          const col = computerColumn(game);
+          if (col !== null) game = drop(game, col);
+          thinking = false; timer = null; render();
+        }, 350);
+      } else render();
+    }
+    function reset() {
+      generation++; clearTimeout(timer); timer = null; thinking = false;
+      game = newState(); animatedMove = -1; render();
+    }
+    document.getElementById('new-game').addEventListener('click', reset);
+    modeSelect.addEventListener('change', reset);
+    document.addEventListener('keydown', event => {
+      if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest('select,input,textarea,[contenteditable="true"]')) return;
+      if (/^[1-7]$/.test(event.key)) { event.preventDefault(); move(Number(event.key) - 1); }
+    });
+    render();
+  })();
+  </script>
+</body>
+</html>
