@@ -14,4 +14,4 @@ Download or clone this repository and open `week-01/connect-four.html` in a mode
 
 ### Tool disclosure
 
-Week 1 was prepared with **OpenAI Codex**, not Claude Code. This records the tool actually used; it does not claim instructor approval of the substitution.
+Built with assistance from OpenAI Codex, including code generation and testing.
