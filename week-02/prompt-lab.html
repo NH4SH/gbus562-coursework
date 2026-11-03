@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="A local prompt experiment notebook with real Anthropic API runs and unedited exports.">
+<title>PromptLab</title>
+<style>
+:root{--paper:#f6f1e7;--ink:#172b3a;--muted:#52616a;--line:#d4cdbf;--accent:#203d50;--red:#a82c25;--focus:#1e6592;--white:#fffdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Arial,Helvetica,sans-serif}::selection{background:#e9b846;color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer}button,input,select,textarea{border-radius:6px}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}button{min-height:44px;padding:9px 16px;border:1px solid var(--accent);background:var(--accent);color:white;font-weight:bold}button:hover:not(:disabled){background:#31576e}button.secondary{background:transparent;color:var(--ink);border-color:var(--line)}button.secondary:hover:not(:disabled){background:#e9e3d8}button:disabled{opacity:.55;cursor:default}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);gap:24px}h1{font:normal 2.7rem/1.1 Georgia,serif;letter-spacing:-.025em;margin:0}h2{font:normal 1.65rem/1.2 Georgia,serif;margin:0 0 16px}h3{font-size:1rem;margin:0}p{margin:8px 0 16px}.muted,small{color:var(--muted)}header p{margin:0;max-width:58ch;font-size:.92rem}main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px}.connection{grid-column:1/-1;display:grid;grid-template-columns:minmax(200px,2fr) minmax(160px,1fr) minmax(100px,.7fr) auto;gap:16px;align-items:end;padding-bottom:24px;border-bottom:1px solid var(--line)}label{display:block;font-size:.85rem;font-weight:bold;margin-bottom:6px}input,select,textarea{display:block;width:100%;padding:10px 12px;color:var(--ink);border:1px solid var(--line);background:var(--white)}textarea{resize:vertical;min-height:130px;line-height:1.5;caret-color:var(--focus)}input{min-height:44px}input[type=password]{font-family:monospace}.field{margin-bottom:18px}.connection .field{margin:0}.span-all{grid-column:1/-1}.connection small{display:block;font-size:.8rem}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row.between{justify-content:space-between}.experiment{min-width:0}.experiment-heading{margin-bottom:20px}#prompt{min-height:280px}#status{padding:12px 0;min-height:48px;margin:0;font-size:.9rem;color:var(--muted)}#status.error{color:var(--red)}.output-area{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.output{white-space:pre-wrap;overflow-wrap:anywhere;max-height:560px;overflow:auto;padding:18px;background:var(--white);border-radius:6px;min-height:200px;font:inherit;margin:12px 0}.output:empty::before{content:'Send a message to see the actual conversation here.';color:var(--muted)}.run-list{list-style:none;margin:14px 0 0;padding:0}.run-list li{border-top:1px solid var(--line);padding:12px 0;display:flex;justify-content:space-between;align-items:center;gap:12px}.run-list button{font-weight:normal}.tag{font-size:.8rem;font-variant-numeric:tabular-nums;color:var(--muted)}details{margin-top:20px}summary{cursor:pointer;font-weight:bold}.request-data{font-size:.75rem;max-height:260px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--white);padding:12px}.notice{padding-bottom:10px;font-size:.86rem;color:var(--muted)}footer{border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}a{color:var(--focus);text-underline-offset:3px}#download-status{font-size:.85rem}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}@media(max-width:900px){main{display:block}.connection{display:grid;grid-template-columns:1fr 1fr;margin-bottom:28px}.connection .key-field{grid-column:1/-1}.connection .forget{align-self:end}.results{margin-top:36px;border-top:1px solid var(--line);padding-top:24px}header{display:block}header p{margin-top:12px}}@media(max-width:500px){header,main,footer{padding:22px 18px}h1{font-size:2.35rem}.connection{gap:12px}.row button{flex-grow:1}.run-list li{align-items:flex-start}.run-list button{flex-grow:0}#prompt{min-height:300px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header><h1>PromptLab</h1><p>Change the instructions. Compare the response.<br>Keep a faithful record of each experiment.</p></header>
+<main>
+<section class="connection" aria-label="API connection">
+<div class="field key-field"><label for="api-key">Anthropic API key</label><input id="api-key" type="password" placeholder="Paste a key for this session" autocomplete="off" spellcheck="false" data-lpignore="true"></div>
+<div class="field"><label for="model">Required model</label><input id="model" value="claude-sonnet-5" readonly spellcheck="false" autocomplete="off"></div>
+<div class="field"><label for="max-tokens">Max output tokens</label><input id="max-tokens" type="number" min="1" max="8192" step="1" value="1200"></div>
+<button id="forget-key" class="secondary forget" type="button">Clear key</button>
+<small class="span-all">The key stays in this page’s memory. It is sent only to api.anthropic.com, and is excluded from exports. Each message makes one billable API request; there are no automatic retries. Refreshing clears conversations, so export before closing.</small>
+</section>
+<section class="experiment" aria-labelledby="experiment-title">
+<div class="row between experiment-heading"><h2 id="experiment-title">Build a conversation</h2><button id="new-conversation" type="button" class="secondary">New conversation</button></div>
+<p class="notice">Start a new conversation for each task. Choose your technique and write its required output format into the prompt. Follow-up refinements stay with that conversation; exports preserve every successful turn.</p>
+<div class="field"><label for="task">Export file</label><select id="task"><option value="1">task-1.md</option><option value="2">task-2.md</option><option value="3">task-3.md</option><option value="4">task-4.md</option></select></div>
+<div class="field"><label for="technique">Technique <span class="muted">(your choice)</span></label><select id="technique"><option value="">Choose a technique</option><option value="zero-shot">Zero-shot</option><option value="one-shot">One-shot</option><option value="few-shot">Few-shot</option><option value="chain-of-thought">Chain-of-thought</option></select></div>
+<div class="field"><label for="system">System instruction <span class="muted">(optional; fixed after the first successful message)</span></label><textarea id="system" rows="3" placeholder="Set the assistant’s role or consistent instructions."></textarea></div>
+<div class="field"><label for="prompt">Your next message</label><textarea id="prompt" spellcheck="true" placeholder="Enter your task prompt, or a follow-up to the selected conversation."></textarea></div>
+<div class="row"><button id="run" type="button">Send to Claude</button><button id="cancel" type="button" class="secondary" disabled>Cancel request</button></div>
+<p id="status" role="status" aria-live="polite">Ready. No API requests have been made.</p>
+</section>
+<section class="results" aria-labelledby="results-title">
+<div class="row between"><h2 id="results-title">Conversation record</h2><span id="run-total" class="tag">0 completed conversations</span></div>
+<p class="muted">Select a conversation to continue it or export its unedited transcript. Nothing is saved across refreshes.</p>
+<ol class="run-list" id="run-list" aria-label="Conversations"></ol>
+<div class="output-area"><div class="row between"><h3 id="result-name">New conversation</h3><span id="result-meta" class="tag"></span></div><pre id="output" class="output" aria-label="Unedited conversation transcript" tabindex="0"></pre>
+<div class="row"><button id="export-json" class="secondary" type="button" disabled>Export audit JSON</button><button id="export-md" class="secondary" type="button" disabled>Export Markdown</button><button id="export-all" class="secondary" type="button" disabled>Export all audit records</button></div><p id="download-status" role="status" aria-live="polite"></p>
+<details><summary>Exact request and raw response</summary><pre id="request-data" class="request-data"></pre></details></div>
+</section>
+</main>
+<footer>Built with assistance from OpenAI Codex, including code generation and testing. Exports contain actual API run records, never sample responses. API access and credits are separate from a coding-assistant subscription.</footer>
+<noscript>Enable JavaScript to use PromptLab.</noscript>
+<script id="promptlab-script">
+(() => {
+  'use strict';
+  const ENDPOINT = 'https://api.anthropic.com/v1/messages';
+  const API_VERSION = '2026-10-21';
+  const MODEL = 'claude-sonnet-5';
+  const TECHNIQUES = Object.freeze(['zero-shot','one-shot','few-shot','chain-of-thought']);
+  function deepFreeze(value) {if(value && typeof value==='object' && !Object.isFrozen(value)){Object.values(value).forEach(deepFreeze);Object.freeze(value);}return value;}
+  const copy = value => JSON.parse(JSON.stringify(value));
+  function newConversation(task, technique, system='') {
+    if(!/^[1-4]$/.test(String(task)))throw new Error('Choose task 1, 2, 3, or 4.');
+    if(!TECHNIQUES.includes(technique))throw new Error('Choose your prompting technique before sending.');
+    return deepFreeze({schema:'promptlab.conversation.v1',task:Number(task),technique,model:MODEL,system:String(system),turns:[]});
+  }
+  function history(conversation) {
+    return conversation.turns.flatMap(turn=>[{role:'user',content:turn.request.messages.at(-1).content},{role:'assistant',content:copy(turn.response.content)}]);
+  }
+  function buildRequest(input) {
+    if(!input || typeof input.prompt!=='string' || !input.prompt.trim())throw new Error('Enter a message before sending.');
+    if(input.model!==undefined && input.model!==MODEL)throw new Error('This assignment requires claude-sonnet-5. No model substitution is allowed.');
+    const maxTokens=Number(input.maxTokens);
+    if(!Number.isInteger(maxTokens)||maxTokens<1||maxTokens>8192)throw new Error('Max output tokens must be a whole number from 1 to 8192.');
+    const previous=input.history || [];
+    if(!Array.isArray(previous) || previous.length%2!==0 || previous.some((message,index)=>message.role!==(index%2?'assistant':'user')))throw new Error('Conversation history must contain complete user and Claude turns. Start a new conversation.');
+    const request={model:MODEL,max_tokens:maxTokens,messages:[...copy(previous),{role:'user',content:input.prompt}],stream:false};
+    if(typeof input.system==='string' && input.system.trim())request.system=input.system;
+    return request;
+  }
+  function responseText(response) {return Array.isArray(response?.content)?response.content.filter(block=>block.type==='text').map(block=>block.text).join('\n\n'):'';}
+  function makeRecord({request,raw,httpStatus,startedAt,finishedAt,requestId}) {
+    let response;try{response=JSON.parse(raw);}catch{throw new Error('The API returned unreadable JSON. No successful turn was recorded.');}
+    if(httpStatus<200||httpStatus>=300)throw new Error(`API request failed (HTTP ${httpStatus}): ${response?.error?.message || 'Check the key, credits, required model access, and request settings.'}`);
+    if(response.type!=='message'||response.role!=='assistant'||typeof response.id!=='string'||!Array.isArray(response.content))throw new Error('The API did not return an assistant message. No successful turn was recorded.');
+    return deepFreeze({schema:'promptlab.turn.v1',source:'Anthropic Messages API',endpoint:ENDPOINT,api_version:API_VERSION,started_at:startedAt,finished_at:finishedAt,http_status:httpStatus,request_id:requestId||null,request:copy(request),response_raw:raw,response,output_text:responseText(response)});
+  }
+  function appendTurn(conversation,turn) {
+    const expected=history(conversation);
+    if(turn.request.model!==conversation.model || (turn.request.system||'')!==(conversation.system.trim()?conversation.system:'') || turn.request.messages.length!==expected.length+1 || JSON.stringify(turn.request.messages.slice(0,-1))!==JSON.stringify(expected))throw new Error('The response does not match this conversation. Start a new conversation.');
+    return deepFreeze({...conversation,turns:[...conversation.turns,turn]});
+  }
+  function markdown(conversation) {
+    if(!conversation.turns.length)throw new Error('Send a message before exporting.');
+    let text=conversation.model+'\n\n### System\n\n'+conversation.system;
+    for(const turn of conversation.turns)text+='\n\n### You\n\n'+turn.request.messages.at(-1).content+'\n\n### Claude\n\n'+turn.output_text;
+    return text+'\n';
+  }
+  function filename(conversation,extension='md'){return `task-${conversation.task}.${extension}`;}
+  globalThis.PromptLab=Object.freeze({ENDPOINT,API_VERSION,MODEL,TECHNIQUES,newConversation,history,buildRequest,responseText,makeRecord,appendTurn,markdown,filename});
+  if(typeof document==='undefined')return;
+  const $=id=>document.getElementById(id),conversations=[];
+  let selected=-1,busy=false,controller=null;
+  function setStatus(message,error=false){$('status').textContent=message;$('status').className=error?'error':'';}
+  function syncControls(){for(const id of ['run','prompt','max-tokens','new-conversation'])$(id).disabled=busy;for(const id of ['system','task','technique'])$(id).disabled=busy||selected>=0;$('cancel').disabled=!busy;for(const button of $('run-list').children)for(const child of button.children)if(child.tagName==='BUTTON')child.disabled=busy;}
+  function setBusy(value){busy=value;syncControls();}
+  function showConversation(index){
+    if(busy)return;selected=index;const conversation=conversations[index];
+    $('task').value=String(conversation.task);$('technique').value=conversation.technique;$('system').value=conversation.system;$('prompt').value='';
+    $('result-name').textContent=`Task ${conversation.task} · ${conversation.technique}`;
+    $('output').textContent=conversation.turns.map(turn=>'You\n'+turn.request.messages.at(-1).content+'\n\nClaude\n'+turn.output_text).join('\n\n');
+    const last=conversation.turns.at(-1);$('result-meta').textContent=`${last.response.model || MODEL} · ${conversation.turns.length} ${conversation.turns.length===1?'turn':'turns'} · ${last.response.usage?.input_tokens??'?'} in / ${last.response.usage?.output_tokens??'?'} out · ${last.response.stop_reason||'unknown stop reason'}`;
+    $('request-data').textContent=JSON.stringify(conversation,null,2);$('export-json').disabled=false;$('export-md').disabled=false;syncControls();
+  }
+  function renderList(){const list=$('run-list');list.replaceChildren();conversations.forEach((conversation,index)=>{const li=document.createElement('li'),button=document.createElement('button'),meta=document.createElement('span');button.type='button';button.className='secondary';button.textContent=`Task ${conversation.task} · ${conversation.technique}`;button.addEventListener('click',()=>showConversation(index));meta.className='tag';meta.textContent=`${conversation.turns.length} ${conversation.turns.length===1?'turn':'turns'}`;li.append(button,meta);list.append(li);});$('run-total').textContent=`${conversations.length} completed ${conversations.length===1?'conversation':'conversations'}`;$('export-all').disabled=!conversations.length;}
+  function startNew(){if(busy)return;selected=-1;$('system').value='';$('prompt').value='';$('technique').value='';const next=[1,2,3,4].find(task=>!conversations.some(c=>c.task===task));if(next)$('task').value=String(next);$('result-name').textContent='New conversation';$('result-meta').textContent='';$('output').textContent='';$('request-data').textContent='';$('export-json').disabled=true;$('export-md').disabled=true;$('download-status').textContent='';syncControls();setStatus('New conversation. Previous conversations remain available in the list.');}
+  async function run(){
+    if(busy)return;let conversation,request;
+    try{conversation=selected>=0?conversations[selected]:newConversation($('task').value,$('technique').value,$('system').value);request=buildRequest({prompt:$('prompt').value,system:conversation.system,model:MODEL,maxTokens:$('max-tokens').value,history:history(conversation)});}catch(error){setStatus(error.message,true);return;}
+    const key=$('api-key').value.trim();if(!key){setStatus('Enter an Anthropic API key. No request was sent.',true);$('api-key').focus();return;}
+    const index=selected,startedAt=new Date().toISOString();controller=new AbortController();setBusy(true);setStatus('Waiting for the Anthropic API…');
+    try{
+      const response=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':API_VERSION,'anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(request),signal:controller.signal,credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer'});
+      const raw=await response.text(),turn=makeRecord({request,raw,httpStatus:response.status,startedAt,finishedAt:new Date().toISOString(),requestId:response.headers.get('request-id')}),updated=appendTurn(conversation,turn);
+      if(index<0){conversations.push(updated);selected=conversations.length-1;}else conversations[index]=updated;
+      busy=false;renderList();showConversation(selected);
+      setStatus(turn.response.stop_reason==='max_tokens'?'Saved the actual response; it reached the output limit. Export it as-is, or send a follow-up to continue.':turn.response.stop_reason==='refusal'?'The API returned a refusal. Its actual response is preserved.':'Response saved in memory. Export this conversation before closing.');
+    }catch(error){setStatus(error.name==='AbortError'?'Request cancelled. The server may already have processed it; no retry was sent.':error instanceof TypeError?'Could not reach the API. Check connectivity and browser access; no retry was sent.':error.message,true);}
+    finally{controller=null;setBusy(false);}
+  }
+  function download(text,type,name){const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);$('download-status').textContent=`Download requested: ${name}. Put this unedited export in week-02/runs/.`;}
+  $('new-conversation').addEventListener('click',startNew);$('run').addEventListener('click',run);$('cancel').addEventListener('click',()=>controller?.abort());$('forget-key').addEventListener('click',()=>{$('api-key').value='';setStatus(busy?'Key cleared from the input. The active request has already been sent.':'API key cleared.');});
+  $('export-json').addEventListener('click',()=>{if(selected>=0)download(JSON.stringify(conversations[selected],null,2)+'\n','application/json',`task-${conversations[selected].task}-audit.json`);});
+  $('export-md').addEventListener('click',()=>{if(selected>=0)download(markdown(conversations[selected]),'text/markdown;charset=utf-8',filename(conversations[selected]));});
+  $('export-all').addEventListener('click',()=>{if(conversations.length)download(JSON.stringify({schema:'promptlab.collection.v1',conversations},null,2)+'\n','application/json','promptlab-audit.json');});
+})();
+</script>
+</body>
+</html>
