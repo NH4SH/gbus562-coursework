@@ -1,0 +1,41 @@
+QUESTION: Can I refund the outgoing international wire transfer fee for a member without approval from a manager?
+
+RETRIEVED CHUNKS (cosine similarity; higher is closer)
+
+Rank: 1 | Similarity: 0.611848 | Source: consumer-fee-schedule.html
+Consumer Fee Schedule | Wire transfers
+Source: consumer-fee-schedule.html
+Version 8 (current). Replaces Version 7. Owner: Member Services.
+
+Incoming domestic wire transfer: $10.
+Incoming international wire transfer: $15.
+Outgoing domestic wire transfer: $25.
+Outgoing international wire transfer: $45. The receiving bank or an intermediary bank may deduct its own fees from the amount sent.
+
+Rank: 2 | Similarity: 0.570936 | Source: fee-refund-guide.html
+Fee Refund Guide for Member Service Staff | Refunds that need a branch manager
+Source: fee-refund-guide.html
+Version 2 (current). Owner: Member Services.
+
+A refund needs the branch manager's approval when the fee is more than $30, when the member has already had a refund in the last 90 days, or when the member asks for several fees to be refunded at once. A branch manager may approve refunds of up to $150 in total for one member in any 90-day period.
+
+Rank: 3 | Similarity: 0.541576 | Source: fee-refund-guide.html
+Fee Refund Guide for Member Service Staff | What a member service representative can approve
+Source: fee-refund-guide.html
+Version 2 (current). Owner: Member Services.
+
+A member service representative may approve a refund of a single fee of $30 or less without anyone else's approval. A representative may approve only one refund for the same member in any 90-day period.
+
+Rank: 4 | Similarity: 0.506650 | Source: fee-refund-guide.html
+Fee Refund Guide for Member Service Staff | Refunds that need the Member Services Director
+Source: fee-refund-guide.html
+Version 2 (current). Owner: Member Services.
+
+Refunds of more than $150 in total for one member in any 90-day period need the Member Services Director's approval. So does any refund for a business account.
+
+ANSWER
+Based on the sources: the outgoing international wire transfer fee is $45 [consumer-fee-schedule.html].
+
+Per the refund approval rules, a member service representative may only approve a refund without anyone else's approval if it is a single fee of $30 or less, and only one such refund per member in any 90-day period [fee-refund-guide.html]. Since $45 exceeds the $30 threshold, this refund does **not** qualify for representative-level approval and requires branch manager approval, as refunds exceeding $30 explicitly need the branch manager's sign-off [fee-refund-guide.html].
+
+So no, you cannot refund this fee without manager approval — it must go to the branch manager (or higher, if other conditions apply, such as the member having had a refund in the last 90 days, multiple fees being refunded at once, the cumulative 90-day total exceeding $150, or the account being a business account, which would require the Member Services Director instead) [fee-refund-guide.html].

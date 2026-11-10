@@ -1,0 +1,42 @@
+QUESTION: What is the current rate on a 30-year fixed mortgage?
+
+RETRIEVED CHUNKS (cosine similarity; higher is closer)
+
+Rank: 1 | Similarity: 0.289734 | Source: consumer-fee-schedule.html
+Consumer Fee Schedule | Stop payments
+Source: consumer-fee-schedule.html
+Version 8 (current). Replaces Version 7. Owner: Member Services.
+
+A stop payment on a check costs $30 per request. One request can cover a single check or a series of checks with consecutive numbers. A stop payment stays in effect for six months and can be renewed for another $30.
+
+Rank: 2 | Similarity: 0.255732 | Source: share-certificates.html
+Share Certificates | Dividend rates
+Source: share-certificates.html
+Version 5 (current). Owner: Deposit Products.
+
+6-month share certificate: 3.05% annual percentage yield (APY).
+12-month share certificate: 3.40% APY.
+24-month share certificate: 3.55% APY.
+36-month share certificate: 3.60% APY.
+60-month share certificate: 3.75% APY.
+The rate is fixed when the certificate is opened and does not change during the term. Dividends are paid monthly and can stay in the certificate or be transferred to the member's savings or checking account.
+
+Rank: 3 | Similarity: 0.252738 | Source: consumer-fee-schedule.html
+Consumer Fee Schedule | Checking account monthly fees
+Source: consumer-fee-schedule.html
+Version 8 (current). Replaces Version 7. Owner: Member Services.
+
+Everyday Checking has no monthly service fee. Plus Checking has a monthly service fee of $8. The Plus Checking fee is waived for any month in which the account keeps a minimum daily balance of $1,000, or receives direct deposits totaling $500 or more.
+
+Rank: 4 | Similarity: 0.222818 | Source: consumer-fee-schedule.html
+Consumer Fee Schedule | Wire transfers
+Source: consumer-fee-schedule.html
+Version 8 (current). Replaces Version 7. Owner: Member Services.
+
+Incoming domestic wire transfer: $10.
+Incoming international wire transfer: $15.
+Outgoing domestic wire transfer: $25.
+Outgoing international wire transfer: $45. The receiving bank or an intermediary bank may deduct its own fees from the amount sent.
+
+ANSWER
+I cannot find information about 30-year fixed mortgage rates in these sources. The retrieved passages only cover stop payment fees, checking account fees, wire transfer fees [consumer-fee-schedule.html], and share certificate dividend rates [share-certificates.html] — none of which address mortgage rates.
