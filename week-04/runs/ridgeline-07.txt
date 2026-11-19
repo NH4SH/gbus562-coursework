@@ -1,0 +1,35 @@
+Sender: logan.brooks@ridgelinehotels.example
+Subject: Days off
+Step 1: get_leave_balance
+Inputs: {}
+Result: Error executing tool get_leave_balance: No employee record matches the sender's address. Do not state any balance. Ask the sender to contact HR directly.
+Step 2: search_policy
+Inputs: {"query": "PTO accrual for new hires part-time pool attendant seasonal employees"}
+Result: {
+  "source": "pto-policy.html",
+  "text": "Paid Time Off (PTO) Policy | How you earn PTO\nSource: pto-policy.html\nEffective this year. Owner: People and Culture.\n\nFull-time team members earn 12 PTO days a year in their first three years and 18 PTO days a year after that, credited monthly. Part-t
+Step 3: save_reply
+Inputs: {"reply_text": "Hi Logan,\n\nThanks for reaching out, and welcome to the team!\n\nI wasn't able to pull up your specific PTO balance — our system couldn't find an employee record matching this email address, so I can't confirm an exact number right now. Could you reach out to HR directly (or check with your supervisor) with your employee ID so they can look up your current balance?\n\nIn the meantime, here's how PTO accrual generally works, per our PTO Policy (pto-policy.html):\n- Full-time team members earn 12 PTO days a year in their first three years (credited monthly), increasing to 18 days/year after that.\n- Part-time team members earn PTO in proportion to their scheduled hours.\n- Seasonal team members don't earn PTO.\n\nSince pool attendant roles at Durango can sometimes be seasonal or part-time, your accrual will depend on how your position is classified — HR can confirm which category applies to you and your exact balance.\n\nBest,\nHR Assistant", "needs_human_review": true}
+Result: Draft saved locally; no email sent.
+Stop: draft saved; no further model call needed
+DRAFT
+Hi Logan,
+
+Thanks for reaching out, and welcome to the team!
+
+I wasn't able to pull up your specific PTO balance — our system couldn't find an employee record matching this email address, so I can't confirm an exact number right now. Could you reach out to HR directly (or check with your supervisor) with your employee ID so they can look up your current balance?
+
+In the meantime, here's how PTO accrual generally works, per our PTO Policy (pto-policy.html):
+- Full-time team members earn 12 PTO days a year in their first three years (credited monthly), increasing to 18 days/year after that.
+- Part-time team members earn PTO in proportion to their scheduled hours.
+- Seasonal team members don't earn PTO.
+
+Since pool attendant roles at Durango can sometimes be seasonal or part-time, your accrual will depend on how your position is classified — HR can confirm which category applies to you and your exact balance.
+
+Best,
+HR Assistant
+Needs human review: true
+Total input tokens: 4289
+Total output tokens: 537
+Model calls: 3
+Budget reserved: $0.156; token-based cost: $0.013948

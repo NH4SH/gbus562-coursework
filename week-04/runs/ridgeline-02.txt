@@ -1,0 +1,40 @@
+Sender: kevin.walsh@ridgelinehotels.example
+Subject: Time off for a funeral
+Step 1: search_policy
+Inputs: {"query": "bereavement leave policy"}
+Result: {
+  "source": "bereavement-and-family-leave.html",
+  "text": "Bereavement and Family Leave | How to request bereavement leave\nSource: bereavement-and-family-leave.html\nEffective this year. Owner: People and Culture.\n\nTell your supervisor as soon as you can. No documentation is needed. Bereavemen
+Step 2: get_leave_balance
+Inputs: {}
+Result: {
+  "email": "kevin.walsh@ridgelinehotels.example",
+  "balances": {
+    "PTO Days Remaining": "10",
+    "Sick Days Remaining": "6"
+  }
+}
+Step 3: save_reply
+Inputs: {"reply_text": "Hi Kevin,\n\nI'm very sorry for the loss of your grandmother.\n\nPer our Bereavement and Family Leave policy (bereavement-and-family-leave.html), for the death of a grandparent, you're eligible for up to 3 paid days off. These days are paid separately and don't reduce your PTO or sick balance. They don't need to be taken consecutively, but must be used within 60 days.\n\nTo use this leave, just let your supervisor know as soon as you can — no documentation is required.\n\nFor reference, your current balances remain unaffected: 10 PTO days and 6 sick days.\n\nWishing you and your family comfort during this time.\n\nBest,\nHR Assistant", "needs_human_review": false}
+Result: Draft saved locally; no email sent.
+Stop: draft saved; no further model call needed
+DRAFT
+Hi Kevin,
+
+I'm very sorry for the loss of your grandmother.
+
+Per our Bereavement and Family Leave policy (bereavement-and-family-leave.html), for the death of a grandparent, you're eligible for up to 3 paid days off. These days are paid separately and don't reduce your PTO or sick balance. They don't need to be taken consecutively, but must be used within 60 days.
+
+To use this leave, just let your supervisor know as soon as you can — no documentation is required.
+
+For reference, your current balances remain unaffected: 10 PTO days and 6 sick days.
+
+Wishing you and your family comfort during this time.
+
+Best,
+HR Assistant
+Needs human review: false
+Total input tokens: 3173
+Total output tokens: 404
+Model calls: 2
+Budget reserved: $0.104; token-based cost: $0.010386

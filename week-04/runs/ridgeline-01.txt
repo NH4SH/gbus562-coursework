@@ -1,0 +1,39 @@
+Sender: jenna.morales@ridgelinehotels.example
+Subject: PTO question
+Step 1: get_leave_balance
+Inputs: {}
+Result: {
+  "email": "jenna.morales@ridgelinehotels.example",
+  "balances": {
+    "PTO Days Remaining": "8",
+    "Sick Days Remaining": "5"
+  }
+}
+Step 2: search_policy
+Inputs: {"query": "PTO carryover to next year"}
+Result: {
+  "source": "pto-policy.html",
+  "text": "Paid Time Off (PTO) Policy | Carrying PTO into next year\nSource: pto-policy.html\nEffective this year. Owner: People and Culture.\n\nYou can carry up to 3 unused PTO days into the next calendar year. Any unused days above 3 are paid out at your regular ra
+Step 3: save_reply
+Inputs: {"reply_text": "Hi Jenna,\n\nYou currently have 8 PTO days remaining this year.\n\nAs for carryover: you can carry up to 3 unused PTO days into next year. Any unused days beyond that 3-day cap are paid out at your regular rate in your first paycheck of January (source: pto-policy.html).\n\nSo if you end the year with more than 3 days unused, only 3 will roll over and the rest will be paid out.\n\nLet me know if you have any other questions!\n\nBest,\nHR Assistant\n", "needs_human_review": false}
+Result: Draft saved locally; no email sent.
+Stop: draft saved; no further model call needed
+DRAFT
+Hi Jenna,
+
+You currently have 8 PTO days remaining this year.
+
+As for carryover: you can carry up to 3 unused PTO days into next year. Any unused days beyond that 3-day cap are paid out at your regular rate in your first paycheck of January (source: pto-policy.html).
+
+So if you end the year with more than 3 days unused, only 3 will roll over and the rest will be paid out.
+
+Let me know if you have any other questions!
+
+Best,
+HR Assistant
+
+Needs human review: false
+Total input tokens: 3121
+Total output tokens: 316
+Model calls: 2
+Budget reserved: $0.104; token-based cost: $0.009402

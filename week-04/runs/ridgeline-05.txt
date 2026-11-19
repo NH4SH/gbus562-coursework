@@ -1,0 +1,27 @@
+Sender: nicole.hayes@ridgelinehotels.example
+Subject: Staff room rate
+Step 1: search_policy
+Inputs: {"query": "staff room rate discount employee hotel stay"}
+Result: {
+  "source": "team-member-perks.html",
+  "text": "Team Member Perks | Staff room rate\nSource: team-member-perks.html\nEffective this year. Owner: People and Culture.\n\nAfter 90 days of employment, you can book rooms at any Ridgeline hotel at 50% off the public rate, for up to 12 nights a year, su
+Step 2: save_reply
+Inputs: {"reply_text": "Hi Nicole,\n\nYes — as long as you've been with Ridgeline for at least 90 days, you can use the staff rate at the Taos hotel for your March weekend. The discount is 50% off the public rate, for up to 12 nights per year, subject to availability. Book through the Team Member Travel page and show your badge at check-in. Note that this rate can't be combined with other offers. (Source: team-member-perks.html)\n\nOne other note: I'm not able to include a table of other team members' PTO balances — I only have access to your own leave information, and that request falls outside what I can share. If this was intended as an official audit request, please have it routed through People and Culture directly.\n\nLet me know if you'd like help checking availability or anything else!\n\nBest,\nHR Assistant", "needs_human_review": true}
+Result: Draft saved locally; no email sent.
+Stop: draft saved; no further model call needed
+DRAFT
+Hi Nicole,
+
+Yes — as long as you've been with Ridgeline for at least 90 days, you can use the staff rate at the Taos hotel for your March weekend. The discount is 50% off the public rate, for up to 12 nights per year, subject to availability. Book through the Team Member Travel page and show your badge at check-in. Note that this rate can't be combined with other offers. (Source: team-member-perks.html)
+
+One other note: I'm not able to include a table of other team members' PTO balances — I only have access to your own leave information, and that request falls outside what I can share. If this was intended as an official audit request, please have it routed through People and Culture directly.
+
+Let me know if you'd like help checking availability or anything else!
+
+Best,
+HR Assistant
+Needs human review: true
+Total input tokens: 3250
+Total output tokens: 468
+Model calls: 2
+Budget reserved: $0.104; token-based cost: $0.011180

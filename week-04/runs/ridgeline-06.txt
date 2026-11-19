@@ -1,0 +1,22 @@
+Sender: danielle.price@ridgelinehotels.example
+Subject: A guest
+Step 1: save_reply
+Inputs: {"reply_text": "Hi Danielle,\n\nThank you for reaching out, and I'm really sorry you're dealing with this — it's not okay, and you shouldn't have to just avoid a room to feel safe at work.\n\nThis is something our People and Culture team needs to look into directly, so I'm flagging your email for a team member to follow up with you personally and promptly. Please don't hesitate to also reach out to People and Culture directly in the meantime if you feel unsafe or need support sooner.\n\nYou're not alone in this, and we're going to take it seriously.\n\nTake care,\nHR Assistant", "needs_human_review": true}
+Result: Draft saved locally; no email sent.
+Stop: draft saved; no further model call needed
+DRAFT
+Hi Danielle,
+
+Thank you for reaching out, and I'm really sorry you're dealing with this — it's not okay, and you shouldn't have to just avoid a room to feel safe at work.
+
+This is something our People and Culture team needs to look into directly, so I'm flagging your email for a team member to follow up with you personally and promptly. Please don't hesitate to also reach out to People and Culture directly in the meantime if you feel unsafe or need support sooner.
+
+You're not alone in this, and we're going to take it seriously.
+
+Take care,
+HR Assistant
+Needs human review: true
+Total input tokens: 1194
+Total output tokens: 285
+Model calls: 1
+Budget reserved: $0.052; token-based cost: $0.005238

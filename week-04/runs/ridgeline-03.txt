@@ -1,0 +1,46 @@
+Sender: brittany.cole@ridgelinehotels.example
+Subject: Honeymoon
+Step 1: search_policy
+Inputs: {"query": "PTO request requirements, insufficient balance options, unpaid leave"}
+Result: {
+  "source": "pto-policy.html",
+  "text": "Paid Time Off (PTO) Policy | Borrowing PTO you haven't earned yet\nSource: pto-policy.html\nEffective this year. Owner: People and Culture.\n\nIf a planned absence is longer than your balance, you can borrow up to 3 PTO days from what you will earn in the 
+Step 2: get_leave_balance
+Inputs: {}
+Result: {
+  "email": "brittany.cole@ridgelinehotels.example",
+  "balances": {
+    "PTO Days Remaining": "4",
+    "Sick Days Remaining": "3"
+  }
+}
+Step 3: save_reply
+Inputs: {"reply_text": "Hi Brittany,\n\nCongratulations on your upcoming wedding! 🎉\n\nHere's where things stand: you currently have 4 PTO days remaining, so you're 2 days short of the 6 you'd like to take.\n\nGood news — you have options:\n\n1. **Borrow PTO**: You can borrow up to 3 PTO days from what you'll earn in the next six months, which would cover the gap. This needs your general manager's approval, and the request must be submitted at least 30 days before your time off begins. Keep in mind that if you were to leave Ridgeline before earning those days back, their value would be deducted from your final paycheck.\n\n2. **Submit the request early**: Since you're planning 6 consecutive days off, this falls under the \"5 or more days in a row\" category, which requires your supervisor's approval at least 30 days in advance. Since your honeymoon is about two months out, you're in good shape timing-wise — just be sure to submit it through your hotel's scheduling system soon.\n\nI'd recommend talking to your supervisor and general manager together about borrowing the extra 2 days so everything is approved well ahead of time.\n\n(Source: pto-policy.html)\n\nCongratulations again, and let us know if you have any other questions!\n\nBest,\nHR Assistant, People and Culture", "needs_human_review": false}
+Result: Draft saved locally; no email sent.
+Stop: draft saved; no further model call needed
+DRAFT
+Hi Brittany,
+
+Congratulations on your upcoming wedding! 🎉
+
+Here's where things stand: you currently have 4 PTO days remaining, so you're 2 days short of the 6 you'd like to take.
+
+Good news — you have options:
+
+1. **Borrow PTO**: You can borrow up to 3 PTO days from what you'll earn in the next six months, which would cover the gap. This needs your general manager's approval, and the request must be submitted at least 30 days before your time off begins. Keep in mind that if you were to leave Ridgeline before earning those days back, their value would be deducted from your final paycheck.
+
+2. **Submit the request early**: Since you're planning 6 consecutive days off, this falls under the "5 or more days in a row" category, which requires your supervisor's approval at least 30 days in advance. Since your honeymoon is about two months out, you're in good shape timing-wise — just be sure to submit it through your hotel's scheduling system soon.
+
+I'd recommend talking to your supervisor and general manager together about borrowing the extra 2 days so everything is approved well ahead of time.
+
+(Source: pto-policy.html)
+
+Congratulations again, and let us know if you have any other questions!
+
+Best,
+HR Assistant, People and Culture
+Needs human review: false
+Total input tokens: 3243
+Total output tokens: 629
+Model calls: 2
+Budget reserved: $0.104; token-based cost: $0.012776
