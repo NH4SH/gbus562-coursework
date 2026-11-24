@@ -14,6 +14,8 @@ This repository contains my semester coursework for GBUS 562: AI Language Models
 
 5. **Week 5:** A supplier-response team with a fixed pipeline and a model-routed orchestrator. See [`week-05/README.md`](week-05/README.md), the [write-up](week-05/writeup.md), and all [eight Claude Sonnet 5 runs](week-05/runs).
 
+6. **Week 6:** A draft-only tree-service crew handoff, with a before-and-after evaluation of a dispatch-date guardrail. See [Week 6](week-06/README.md).
+
 ### Play Week 1
 
 Download or clone this repository and open `week-01/connect-four.html` in a modern browser. Choose a column with its numbered button or press a number key from 1 to 7. Connect four discs horizontally, vertically, or diagonally. Use **New game** to restart.

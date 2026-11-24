@@ -1,0 +1,28 @@
+{
+ "PINE": [
+  {"id":"P1","kind":"approved_scope","scope":"Remove marked pine; leave trunk rounds","work_date":"","access":"Use gravel drive"},
+  {"id":"P2","kind":"dispatch_confirmed","work_date":"2027-01-12"}],
+ "OAK": [
+  {"id":"O1","kind":"approved_scope","scope":"Remove oak and grind stump","access":"Use left drive"},
+  {"id":"O2","kind":"approved_scope","scope":"Remove oak only; leave stump","access":"Use right drive"},
+  {"id":"O3","kind":"dispatch_confirmed","work_date":"2027-01-13"}],
+ "MAPLE": [
+  {"id":"M1","kind":"approved_scope","scope":"Prune dead maple limbs","access":"Use north gate"},
+  {"id":"M2","kind":"access_correction","access":"Use south gate; north gate blocked"},
+  {"id":"M3","kind":"dispatch_confirmed","work_date":"2027-01-15"}],
+ "CEDAR": [
+  {"id":"C1","kind":"approved_scope","scope":"Remove storm-fallen cedar","access":"Use paved loop"},
+  {"id":"C2","kind":"customer_proposed","work_date":"2027-01-18"}],
+ "ELM": [
+  {"id":"E1","kind":"approved_scope","scope":"Remove marked elm","access":"Use alley"},
+  {"id":"E2","kind":"dispatch_confirmed","work_date":"2027-01-19"},
+  {"id":"E3","kind":"dispatch_cancelled","work_date":"2027-01-19"}],
+ "BIRCH": [
+  {"id":"B1","kind":"approved_scope","scope":"Haul storm debris only","access":"Use side lot"},
+  {"id":"B2","kind":"dispatch_confirmed","work_date":"2027-01-22"},
+  {"id":"B3","kind":"declined_add_on","scope":"Remove leaning birch"}],
+ "ASH": [
+  {"id":"A1","kind":"approved_scope","scope":"Remove marked ash only","access":"Use rear lane"},
+  {"id":"A2","kind":"dispatch_confirmed","work_date":"2027-01-23"},
+  {"id":"A3","kind":"customer_proposed","work_date":"2027-01-24"}]
+}
