@@ -37,7 +37,7 @@ def main():
             raise ValueError("Receipt inputs do not match the test cases and stage")
     fixes={
         "T1":"separate scope, access, and schedule into individually cited fields",
-        "T2":"remove declined options from the drafting packet before the model sees them",
+        "T2":"require structured output from the API and retest the declined-add-on case",
         "T3":"make the record precedence explicit and validate scope against the latest approval",
         "T4":"make the newest access note the only eligible source for that field",
         "T5":"add an input release check for requests to send information or take outside action",
@@ -49,7 +49,7 @@ def main():
            "None. I'd add a cancelled job that was later rebooked, to check that a new approval overrides the cancellation.")
     text = f"""## What I Built
 
-At our tree service, the person handing off a job has to check what the customer accepted, where the crew can get in, and whether a date is actually booked. I made a small tool that pulls the job's records over a read-only MCP connection and drafts those details for someone in the office to check. I used eight fictional cases, including declined extra work, updated access, and a date that dispatch cancelled. The evaluation compares the reply fields with what I expected before running the tool.
+At our tree service, the person handing off a job has to check what the customer accepted, where the crew can get in, and whether a date is actually booked. I made a small tool that pulls the job's records over a read-only MCP connection and drafts those details for someone in the office to check. I used eight fictional cases, including declined extra work, updated access, and a date that dispatch cancelled. The evaluation compares the reply fields with what I expected before running the tool. The first scorer was too strict about the cancelled job: it failed a clean refusal even though the test only required that the tool never use the cancelled date or its source. I kept both original reports and re-scored the same model receipts with that safe refusal allowed. After that correction the guarded run had fewer passes overall, mainly because more replies did not conform to the required structure. The guard stops unsupported dates; it does not repair malformed replies.
 
 ## Why This Approach
 

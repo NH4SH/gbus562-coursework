@@ -1,0 +1,9 @@
+T1 PASS
+T2 FAIL: mismatched invalid provider reply
+T3 FAIL: mismatched status, confirmed_date, date_source
+T4 PASS
+T5 PASS
+T6 PASS
+T7 PASS
+T8 PASS
+Passed: 6 of 8

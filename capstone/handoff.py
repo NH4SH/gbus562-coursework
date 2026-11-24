@@ -84,6 +84,13 @@ class JobRecords:
         return records
 
 
+class ProviderStageError(RuntimeError):
+    def __init__(self, stage, exc):
+        self.stage = stage
+        self.kind = type(exc).__name__
+        self.status_code = getattr(exc, "status_code", None)
+
+
 def draft_job(client, job_id, request, records, guarded, log_path=None):
     if len(request) > 1000 or len(job_id) > 32:
         raise ValueError("Input is longer than the pilot allows")
@@ -91,12 +98,18 @@ def draft_job(client, job_id, request, records, guarded, log_path=None):
     if len(payload) > 3000:
         raise ValueError("Job packet is longer than the pilot allows")
     messages = [{"role":"user","content":payload}]
-    measured = client.messages.count_tokens(model=MODEL, system=SYSTEM, messages=messages)
+    try:
+        measured = client.messages.count_tokens(model=MODEL, system=SYSTEM, messages=messages)
+    except Exception as exc:
+        raise ProviderStageError("token-count preflight", exc) from exc
     if measured.input_tokens > 4000:
         raise ValueError("Input token count exceeds pilot limit")
     started = time.monotonic()
-    response = client.messages.create(model=MODEL, temperature=0, max_tokens=460,
-                                      system=SYSTEM, messages=messages)
+    try:
+        response = client.messages.create(model=MODEL, max_tokens=460, thinking={"type":"disabled"},
+                                          system=SYSTEM, messages=messages)
+    except Exception as exc:
+        raise ProviderStageError("generation", exc) from exc
     raw = "".join(block.text for block in response.content if block.type == "text")
     sentinel = object()
     parsed = read_reply(raw, invalid=sentinel)

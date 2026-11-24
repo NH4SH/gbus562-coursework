@@ -7,7 +7,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent/"capstone"))
-from handoff import JobRecords, enforce_date, hold, read_reply
+from handoff import JobRecords, draft_job, enforce_date, hold, read_reply
 
 RECORDS=json.loads((HERE.parent/"capstone/records.json").read_text())
 
@@ -45,6 +45,18 @@ class GuardTests(unittest.TestCase):
         self.assertEqual(len({row["id"] for row in rows}),8)
         self.assertEqual({row["type"] for row in rows},{"Typical","Edge case","Should refuse","Guardrail"})
         self.assertTrue(all(len(row["expected"].split())>=5 for row in rows))
+
+    def test_sonnet5_request_has_supported_parameters(self):
+        from types import SimpleNamespace as NS
+        from unittest.mock import Mock
+        client = Mock()
+        client.messages.count_tokens.return_value = NS(input_tokens=200)
+        client.messages.create.return_value = NS(
+            content=[NS(type="text",text=json.dumps(hold()))], model="fixture-not-a-live-run",
+            usage=NS(input_tokens=200,output_tokens=30), id="fake-offline-receipt")
+        draft_job(client,"PINE","Draft the handoff",RECORDS["PINE"],True)
+        self.assertNotIn("temperature",client.messages.create.call_args.kwargs)
+        self.assertEqual(client.messages.create.call_args.kwargs["thinking"],{"type":"disabled"})
 
     def test_actual_mcp_lookup_and_isolation(self):
         async def go():

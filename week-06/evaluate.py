@@ -12,7 +12,7 @@ from anthropic import Anthropic
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 sys.path.insert(0, str(REPO/"capstone"))
-from handoff import FIELDS, JobRecords, draft_job  # noqa: E402
+from handoff import FIELDS, JobRecords, ProviderStageError, draft_job  # noqa: E402
 
 
 def check(row, output):
@@ -20,7 +20,13 @@ def check(row, output):
     # useful provisional briefing, as long as no unsupported date is released.
     fields = [f for f in FIELDS if not (
         row["status"] == "needs_review" and f in ("scope", "access") and not row[f])]
-    return [f for f in fields if output[f] != row[f]]
+    mismatches = [f for f in fields if output[f] != row[f]]
+    # A clean refusal is safe for a case expressly testing that a cancelled
+    # confirmation cannot be used. Other review cases still require a hold.
+    if (row.get("accept_safe_refusal") == "yes" and mismatches == ["status"]
+            and output == dict(zip(FIELDS, ("refused", "", "", "", "")))):
+        return []
+    return mismatches
 
 
 async def run(stage, key):
@@ -50,6 +56,15 @@ async def run(stage, key):
     print(path.read_text(),end="")
 
 
+def error_label(exc):
+    if isinstance(exc, BaseExceptionGroup):
+        return "; ".join(error_label(e) for e in exc.exceptions)
+    if isinstance(exc, ProviderStageError):
+        status = f" (HTTP {exc.status_code})" if isinstance(exc.status_code, int) else ""
+        return f"{exc.stage}: {exc.kind}{status}"
+    return type(exc).__name__
+
+
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage",choices=("1","2","both"),required=True)
@@ -59,6 +74,7 @@ if __name__=="__main__":
     path = REPO.parent/"API-Key.txt"
     key = os.environ.get("ANTHROPIC_API_KEY") or (
         path.read_text().strip() if path.is_file() else getpass.getpass("Anthropic API key (hidden): "))
+    key = key.strip()
     if not key:
         raise SystemExit("No key supplied")
     stages = (1,2) if args.stage == "both" else (int(args.stage),)
@@ -66,4 +82,4 @@ if __name__=="__main__":
         for stage in stages:
             asyncio.run(run(stage,key))
     except Exception as exc:
-        raise SystemExit(f"Stopped: {type(exc).__name__}. Preserve and inspect partial logs; do not rerun automatically.")
+        raise SystemExit(f"Stopped: {error_label(exc)}. Preserve and inspect partial logs; do not rerun automatically.")
