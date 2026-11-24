@@ -1,0 +1,110 @@
+COORDINATOR orchestrator
+SOURCE EMAIL
+From: Victor Lindqvist <v.lindqvist@marlowmetal.example>
+Subject: PO-5520 - BL-12 boilers - please choose a shipping option
+
+Hi,
+
+About PO-5520 for 200 BL-12 boilers: our welding cell is running at half
+capacity this month, so we can't ship the whole order on time. We can offer
+two options:
+
+Option A: Ship 80 boilers on the scheduled date, and the remaining 120 two
+weeks after that.
+
+Option B: Ship all 200 boilers together, six days after the scheduled date.
+
+Please let us know which option you'd like within three business days. If we
+don't hear from you by then, we'll go with Option B.
+
+Regards,
+Victor Lindqvist
+Sales Coordinator, Marlow Metalworks
+
+MODEL orchestrator msg_011ChM6aEAf5L1u1hQC38UKm tokens in=1327 out=56
+ROUTE run_supply_analyst {}
+MODEL supply analyst msg_011ChM6aKcq4Bsms3GHwTCBt tokens in=1572 out=122
+DATA get_part {
+  "part_id": "BL-12"
+}
+DATA get_orders_for_part {
+  "part_id": "BL-12"
+}
+MODEL supply analyst msg_011ChM6aTEUDMoXN2NBtUq6d tokens in=2578 out=278
+DATA check_coverage {
+  "part_id": "BL-12",
+  "arrivals": [
+    {
+      "qty": 80,
+      "day": 7
+    },
+    {
+      "qty": 120,
+      "day": 21
+    }
+  ]
+}
+DATA check_coverage {
+  "part_id": "BL-12",
+  "arrivals": [
+    {
+      "qty": 200,
+      "day": 13
+    }
+  ]
+}
+MODEL supply analyst msg_011ChM6afHGKhJ2pikr1TMkU tokens in=4738 out=416
+ANALYST BRIEF
+{
+  "part_id": "BL-12",
+  "what_changed": "Instead of all 200 boilers arriving on day 7, supplier offers either (A) 80 units on day 7 and 120 units on day 21, or (B) all 200 units on day 13.",
+  "orders_at_risk": [],
+  "options": [
+    {
+      "name": "Option A: 80 on day 7, 120 on day 21",
+      "order_ids_at_risk": [
+        "O-2205"
+      ]
+    },
+    {
+      "name": "Option B: 200 on day 13",
+      "order_ids_at_risk": [
+        "O-2203"
+      ]
+    }
+  ],
+  "decisions_for_a_person": [
+    "Choose Option A or Option B within 3 business days (supplier defaults to Option B if no response).",
+    "Option A risks order O-2205 (Tall Pines Coffee House, 5 units short, ready day 21, 4 days late, late_penalty applies).",
+    "Option B risks order O-2203 (Elm State University Dining, 40 units short, ready day 13, 1 day late, late_penalty applies)."
+  ],
+  "supplier_questions": [
+    "Which shipping option (A or B) does Copperline want for PO-5520?"
+  ]
+}
+MODEL orchestrator msg_011ChM6awR8D4DX6tcA7CjyR tokens in=1807 out=445
+ROUTE finish {
+  "summary": "Marlow Metalworks (PO-5520, 200x BL-12 boilers) cannot ship on time due to reduced welding capacity and has offered two mutually exclusive options:\n\n- Option A: 80 units on schedule (day 7), remaining 120 on day 21. This risks order O-2205 (Tall Pines Coffee House) being 5 units short/4 days late, incurring a late penalty.\n- Option B (supplier's default if no reply within 3 business days): All 200 units on day 13 (6 days late). This risks order O-2203 (Elm State University Dining) being 40 units short/1 day late, incurring a late penalty.\n\nNo supplier reply or customer notices have been drafted yet, since choosing between the options is a business decision with different customer impacts. A person needs to pick Option A or B within the 3-business-day deadline; once decided, I can draft the supplier confirmation and any required customer-at-risk notices.",
+  "needs_person": true
+}
+SUMMARY
+{
+  "specialists_called": [
+    "supply analyst"
+  ],
+  "review_calls": 0,
+  "drafts_saved": 0,
+  "drafts_marked_for_a_person": 0,
+  "decisions_for_a_person": [
+    "Choose Option A or Option B within 3 business days (supplier defaults to Option B if no response).",
+    "Option A risks order O-2205 (Tall Pines Coffee House, 5 units short, ready day 21, 4 days late, late_penalty applies).",
+    "Option B risks order O-2203 (Elm State University Dining, 40 units short, ready day 13, 1 day late, late_penalty applies)."
+  ],
+  "orchestrator_decision": {
+    "summary": "Marlow Metalworks (PO-5520, 200x BL-12 boilers) cannot ship on time due to reduced welding capacity and has offered two mutually exclusive options:\n\n- Option A: 80 units on schedule (day 7), remaining 120 on day 21. This risks order O-2205 (Tall Pines Coffee House) being 5 units short/4 days late, incurring a late penalty.\n- Option B (supplier's default if no reply within 3 business days): All 200 units on day 13 (6 days late). This risks order O-2203 (Elm State University Dining) being 40 units short/1 day late, incurring a late penalty.\n\nNo supplier reply or customer notices have been drafted yet, since choosing between the options is a business decision with different customer impacts. A person needs to pick Option A or B within the 3-business-day deadline; once decided, I can draft the supplier confirmation and any required customer-at-risk notices.",
+    "needs_person": true
+  },
+  "total_tokens": 13339,
+  "external_sends": 0
+}
+Batch API usage estimated so far: USD 0.256248

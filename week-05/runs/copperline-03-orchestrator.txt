@@ -1,0 +1,92 @@
+COORDINATOR orchestrator
+SOURCE EMAIL
+From: Priya Raman <p.raman@ashgroveprecision.example>
+Subject: PO-5531 - BR-64 burr sets - arriving 3 days late
+
+Hello,
+
+A heat-treatment furnace at our plant needed an unplanned repair, so PO-5531
+for 120 BR-64 burr sets will arrive 3 days after the scheduled date. The full
+quantity will ship together.
+
+Please let me know if this causes any problems on your side.
+
+Best,
+Priya Raman
+Order Management, Ashgrove Precision
+
+MODEL orchestrator msg_011ChM6vUuEYfcX8ycR2ec4t tokens in=1244 out=76
+ROUTE run_supply_analyst {}
+MODEL supply analyst msg_011ChM6vaeWpvV6oPmceX3QW tokens in=1489 out=127
+DATA get_part {
+  "part_id": "BR-64"
+}
+DATA get_orders_for_part {
+  "part_id": "BR-64"
+}
+MODEL supply analyst msg_011ChM6vgobPxk7UoE5QVFtZ tokens in=2123 out=139
+DATA check_coverage {
+  "part_id": "BR-64",
+  "arrivals": [
+    {
+      "qty": 120,
+      "day": 13
+    }
+  ]
+}
+MODEL supply analyst msg_011ChM6vngZn7Q7uhhDEP3hp tokens in=2660 out=179
+ANALYST FORMAT REPAIR 1
+MODEL supply analyst msg_011ChM6vvpDbAF4tA9yV9DY6 tokens in=2964 out=109
+ANALYST BRIEF
+{
+  "part_id": "BR-64",
+  "what_changed": "PO-5531 for 120 BR-64 burr sets, originally due day 10, will now arrive as a single shipment on day 13 (3 days late).",
+  "orders_at_risk": [],
+  "options": [],
+  "decisions_for_a_person": [],
+  "supplier_questions": []
+}
+MODEL orchestrator msg_011ChM6w1Gby1N6Gjk6piBeB tokens in=1446 out=113
+ROUTE draft_supplier_reply {}
+MODEL supplier-writer msg_011ChM6wBM5kUccXYCKhSNVh tokens in=639 out=237
+MODEL reviewer msg_011ChM6wPcX4uLmx2hNpnbQm tokens in=958 out=7
+REVIEW supplier round 1: APPROVE
+FINAL DRAFT TO SUPPLIER
+Subject: RE: PO-5531 - BR-64 burr sets - arriving 3 days late
+
+Hello Priya,
+
+Thank you for the heads-up. To confirm our understanding: PO-5531 for 120 BR-64 burr sets, originally due day 10, will now arrive as a single shipment on day 13.
+
+Based on our current records, this delay does not show any downstream impact in units short or days delayed for our orders at this time.
+
+That said, if there is any way to ship a partial quantity sooner — even ahead of the full 120 units — please let us know, as that would help reduce any risk on our end.
+
+Please keep us posted if the timeline shifts further.
+
+Best regards,
+Purchasing, Copperline Coffee Machines
+Marked for a person: no
+MODEL orchestrator msg_011ChM6wRXcXryCrLC4hYU8a tokens in=1586 out=218
+ROUTE finish {
+  "summary": "Ashgrove Precision notified that PO-5531 (120x BR-64 burr sets) will arrive 3 days late due to an unplanned furnace repair, shipping as one full shipment. Supply analyst confirmed no customer orders are at risk from this delay, so no customer notices were drafted. A brief acknowledgment reply to the supplier has been drafted and saved for review. No decision or action needed from a person beyond reviewing the reply draft.",
+  "needs_person": false
+}
+SUMMARY
+{
+  "specialists_called": [
+    "supply analyst",
+    "supplier writer"
+  ],
+  "review_calls": 1,
+  "drafts_saved": 1,
+  "drafts_marked_for_a_person": 0,
+  "decisions_for_a_person": [],
+  "orchestrator_decision": {
+    "summary": "Ashgrove Precision notified that PO-5531 (120x BR-64 burr sets) will arrive 3 days late due to an unplanned furnace repair, shipping as one full shipment. Supply analyst confirmed no customer orders are at risk from this delay, so no customer notices were drafted. A brief acknowledgment reply to the supplier has been drafted and saved for review. No decision or action needed from a person beyond reviewing the reply draft.",
+    "needs_person": false
+  },
+  "total_tokens": 16314,
+  "external_sends": 0
+}
+Batch API usage estimated so far: USD 0.365590

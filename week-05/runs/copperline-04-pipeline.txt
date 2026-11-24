@@ -1,0 +1,53 @@
+COORDINATOR pipeline
+SOURCE EMAIL
+From: Owen Brady <o.brady@pelhamfittings.example>
+Subject: Plant maintenance closure - PO-5540 not affected
+
+Hello,
+
+A quick note for your planning: our plant will close for one week of annual
+maintenance, starting four weeks from today.
+
+Your open order, PO-5540 for 60 SW-3 steam wands, ships before the closure
+and will arrive on the scheduled date. No action is needed on your side.
+
+Kind regards,
+Owen Brady
+Customer Care, Pelham Fittings
+
+MODEL supply analyst msg_011ChM6wca8YXoLG3pAMxXUx tokens in=1487 out=144
+DATA get_part {
+  "part_id": "SW-3"
+}
+DATA get_orders_for_part {
+  "part_id": "SW-3"
+}
+MODEL supply analyst msg_011ChM6wkJTgMsmeBPt2GmRy tokens in=2138 out=231
+ANALYST FORMAT REPAIR 1
+MODEL supply analyst msg_011ChM6wxALz5umm2YyJhpEZ tokens in=2494 out=119
+ANALYST BRIEF
+{
+  "part_id": "SW-3",
+  "what_changed": "No change: PO-5540 (60 units) remains scheduled to arrive in 11 days, unaffected by the supplier's planned one-week maintenance closure starting in 28 days.",
+  "orders_at_risk": [],
+  "options": [],
+  "decisions_for_a_person": [],
+  "supplier_questions": []
+}
+MODEL supplier-writer msg_011ChM6x4gm4XV9qkBLnPgHc tokens in=645 out=13
+SUPPLIER WRITER: NO REPLY NEEDED
+SUMMARY
+{
+  "specialists_called": [
+    "supply analyst",
+    "supplier writer"
+  ],
+  "review_calls": 0,
+  "drafts_saved": 0,
+  "drafts_marked_for_a_person": 0,
+  "decisions_for_a_person": [],
+  "orchestrator_decision": null,
+  "total_tokens": 7271,
+  "external_sends": 0
+}
+Batch API usage estimated so far: USD 0.384188

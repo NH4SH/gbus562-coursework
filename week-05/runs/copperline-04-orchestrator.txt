@@ -1,0 +1,60 @@
+COORDINATOR orchestrator
+SOURCE EMAIL
+From: Owen Brady <o.brady@pelhamfittings.example>
+Subject: Plant maintenance closure - PO-5540 not affected
+
+Hello,
+
+A quick note for your planning: our plant will close for one week of annual
+maintenance, starting four weeks from today.
+
+Your open order, PO-5540 for 60 SW-3 steam wands, ships before the closure
+and will arrive on the scheduled date. No action is needed on your side.
+
+Kind regards,
+Owen Brady
+Customer Care, Pelham Fittings
+
+MODEL orchestrator msg_011ChM6xA4iQdxmHA3v6xcWh tokens in=1242 out=68
+ROUTE run_supply_analyst {}
+MODEL supply analyst msg_011ChM6xEFysfyX3P8g2dsx2 tokens in=1487 out=131
+DATA get_part {
+  "part_id": "SW-3"
+}
+DATA get_orders_for_part {
+  "part_id": "SW-3"
+}
+MODEL supply analyst msg_011ChM6xMFAWk4CDp15d33bp tokens in=2125 out=223
+ANALYST FORMAT REPAIR 1
+MODEL supply analyst msg_011ChM6xXX48heihhLKt1XzL tokens in=2473 out=114
+ANALYST BRIEF
+{
+  "part_id": "SW-3",
+  "what_changed": "No change: PO-5540 (60 units) still arrives on day 11 as originally scheduled, before the supplier's planned week-long plant closure starting on day 28.",
+  "orders_at_risk": [],
+  "options": [],
+  "decisions_for_a_person": [],
+  "supplier_questions": []
+}
+MODEL orchestrator msg_011ChM6xdu2Sn4Dw4kPGe38Z tokens in=1440 out=244
+ROUTE finish {
+  "summary": "Pelham Fittings notified of a one-week plant maintenance closure starting in 4 weeks. Supply analyst confirmed PO-5540 (60x SW-3) ships and arrives on schedule before the closure begins, with no impact. No orders at risk, no supplier reply or customer notice needed. No action required.",
+  "needs_person": false
+}
+SUMMARY
+{
+  "specialists_called": [
+    "supply analyst"
+  ],
+  "review_calls": 0,
+  "drafts_saved": 0,
+  "drafts_marked_for_a_person": 0,
+  "decisions_for_a_person": [],
+  "orchestrator_decision": {
+    "summary": "Pelham Fittings notified of a one-week plant maintenance closure starting in 4 weeks. Supply analyst confirmed PO-5540 (60x SW-3) ships and arrives on schedule before the closure begins, with no impact. No orders at risk, no supplier reply or customer notice needed. No action required.",
+    "needs_person": false
+  },
+  "total_tokens": 9547,
+  "external_sends": 0
+}
+Batch API usage estimated so far: USD 0.409522

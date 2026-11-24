@@ -12,6 +12,8 @@ This repository contains my semester coursework for GBUS 562: AI Language Models
 
 4. **Week 4:** A draft-only HR agent using an MCP server, generalized to Hartwell Foods and Ridgeline Hotels, built with assistance from OpenAI Codex. See [`week-04/README.md`](week-04/README.md). All seven genuine model runs and the completed reflection are in [`week-04/writeup.md`](week-04/writeup.md).
 
+5. **Week 5:** A supplier-response team with a fixed pipeline and a model-routed orchestrator. See [`week-05/README.md`](week-05/README.md), the [write-up](week-05/writeup.md), and all [eight Claude Sonnet 5 runs](week-05/runs).
+
 ### Play Week 1
 
 Download or clone this repository and open `week-01/connect-four.html` in a modern browser. Choose a column with its numbered button or press a number key from 1 to 7. Connect four discs horizontally, vertically, or diagonally. Use **New game** to restart.

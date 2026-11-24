@@ -1,0 +1,4 @@
+drafts/
+__pycache__/
+runs/_diagnostics/
+runs/*.partial
